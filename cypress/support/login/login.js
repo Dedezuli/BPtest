@@ -13,7 +13,6 @@ Cypress.Commands.add('loginAccount', function () {
 })
 
 Cypress.Commands.add('authenticateAndResetUjian', () => {
-  // API untuk login dan reset ujian
   cy.api({
     method: 'POST',
     url: '/api/auth',
@@ -37,8 +36,9 @@ Cypress.Commands.add('authenticateAndResetUjian', () => {
       body: {},
     }).then((response) => {
       expect(response.status).to.equal(200);
-      const jawabId = response.body.data.data[0].jawaban_siswa.jawab_id;
-      const ujianId = response.body.data.data[0].jawaban_siswa.jawab_judul;
+      const data = response.body.data.data[0]?.jawaban_siswa || {};
+      const jawabId = data.jawab_id || 0; 
+      const ujianId = data.jawab_judul || 0; 
 
       cy.api({
         method: 'DELETE',
